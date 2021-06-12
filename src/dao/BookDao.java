@@ -168,5 +168,33 @@ public class BookDao {
 		stmt.executeUpdate();
 					
 	}
+	
+	public void returnBookUsingCustomerPhone(String phone) throws SQLException {
+		System.out.println("Book DAO -> return a Book--------------");
+		
+		// Find the customer id for a given phone first
+		List<Customer> customer = customerDao.getCustomerInfoUsingPhone(phone);
+		System.out.println("CustomerID: " + customer.get(0).getCustomerId() + ", FirstName: " + customer.get(0).getFirstName()
+		+ ", Phone: " + customer.get(0).getPhone()) ;
+		
+		// Find all the books in the transactions table using CustomerId. A customer may have checked out more than ONE book. 
+		transactionDao.FindTransactionByCustomerID(customer.get(0).getCustomerId());
+		System.out.print("Enter the right Transaction ID to return that book: ");
+		int transactionID = Integer.parseInt(scanner.nextLine());
+		transactionDao.returnTransactionByTransactionID(transactionID);
+		
+		// Find the book_id from the transactions table for the given transactionID
+		PreparedStatement ps = connection.prepareStatement(SHOW_BOOKID_FOR_GIVEN_TRANSACTION_ID_QUERY);
+		ps.setInt(1, transactionID);
+		ResultSet rs = ps.executeQuery(); 
+		rs.next();		
+				
+		// Update the books table. Set the status = 'unavailable' for the given book_id
+		CallableStatement stmt = connection.prepareCall(CALL_SP_TO_UPDATE_BOOK_STATUS);
+		stmt.setInt(1, rs.getInt(1));
+		stmt.setString(2, "available");
+		stmt.executeUpdate();
+		
+	}
 		
 }
