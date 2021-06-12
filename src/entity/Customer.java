@@ -8,7 +8,7 @@ public class Customer {
 	private String email; 
 	
 	public Customer(int id, String first_name, String last_name, String phone, String email) {
-		this.setCustomerId(id);
+		this.customerId = id;
 		this.firstName = first_name;
 		this.lastName = last_name;
 		this.phone = phone;
@@ -18,11 +18,9 @@ public class Customer {
 	public int getCustomerId() {
 		return customerId;
 	}
-
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
-	}
-
+	
+	// We CANNOT set a customerId and hence no setter for customerId.
+	
 	public String getFirstName() {
 		return firstName;
 	}

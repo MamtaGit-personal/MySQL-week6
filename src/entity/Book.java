@@ -8,7 +8,7 @@ public class Book {
 	private String status; 
 	
 	public Book(int id, String title, String author, String genre, String status) {
-		this.setBookId(id);
+		this.bookId = id;
 		this.title = title;
 		this.author = author;
 		this.genre = genre;
@@ -19,24 +19,14 @@ public class Book {
 		return bookId;
 	}
 
-	public void setBookId(int bookId) {
-		this.bookId = bookId;
-	}
-
+	// We CANNOT change bookId, title or author for a book and hence no respective setters.
+	
 	public String getTitle() {
 		return title;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public String getAuthor() {
 		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
 	}
 
 	public String getGenre() {

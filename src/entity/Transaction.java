@@ -23,26 +23,16 @@ public class Transaction {
 		return transactionId;
 	}
 
-	public void setTransactionId(int transactionId) {
-		this.transactionId = transactionId;
-	}
-
 	public int getBook_id() {
 		return book_id;
-	}
-
-	public void setBook_id(int book_id) {
-		this.book_id = book_id;
 	}
 
 	public int getCustomer_id() {
 		return customer_id;
 	}
-
-	public void setCustomer_id(int customer_id) {
-		this.customer_id = customer_id;
-	}
-
+	
+	// We CANNOT change transactionId, book_id or customer_if in the transactions table and hence no respective setters.
+	
 	public String getAction() {
 		return action;
 	}
