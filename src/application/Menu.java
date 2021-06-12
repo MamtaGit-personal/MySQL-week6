@@ -60,7 +60,7 @@ public class Menu {
 					renewBook();
 				}
 				else if(selection.equals("8")) {
-					//returnBook();
+					returnBook();
 				}
 				else break;
 			}
@@ -127,6 +127,13 @@ public class Menu {
 		String phone = scanner.nextLine();
 		
 		bookDao.renewBookUsingCustomerPhone(phone);
+	}
+	
+	private void returnBook() throws SQLException {
+		System.out.print("Enter your phone as XXX-XXX-XXXX: ");
+		String phone = scanner.nextLine();
+		
+		bookDao.returnBookUsingCustomerPhone(phone);
 	}
 	
 	private void printMenu() {
