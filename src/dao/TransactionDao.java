@@ -26,7 +26,7 @@ public class TransactionDao {
 	private final String CALL_SP_TO_RENEW_TRANSACTION_FOR_A_GIVEN_ID_QUERY = "{CALL RenewTransactionByTransactionId(?)}";
 	
 	// used in returnBookByTransactionID()
-	private final String CALL_SP_TO_RETURN_TRANSACTION_FOR_A_GIVEN_ID_QUERY = "{CALL ReturnTransactionByTransactionId(?)}";
+	private final String CALL_SP_FOR_RETURN_TRANSACTION_FOR_A_GIVEN_ID_QUERY = "{CALL ReturnTransactionByTransactionId(?)}";
 	
 	public TransactionDao() {
 		connection = DBConnection.getConnection();
@@ -48,7 +48,7 @@ public class TransactionDao {
 	}
 	
 	public void returnTransactionByTransactionID(int transactionID) throws SQLException{
-		CallableStatement stmt = connection.prepareCall(CALL_SP_TO_RETURN_TRANSACTION_FOR_A_GIVEN_ID_QUERY);
+		CallableStatement stmt = connection.prepareCall(CALL_SP_FOR_RETURN_TRANSACTION_FOR_A_GIVEN_ID_QUERY);
 		stmt.setInt(1, transactionID);
 		stmt.executeUpdate();
 		System.out.println("Return Transaction was Successful!");
