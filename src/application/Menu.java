@@ -15,12 +15,12 @@ import entity.Customer;
 public class Menu {
 	
 	private BookDao bookDao = new BookDao();
-	//private CustomerDao customerDao = new CustomerDao();
+	private CustomerDao customerDao = new CustomerDao();
 	//private TransactionDao transactionDao = new TransactionDao();
 	private Scanner scanner = new Scanner(System.in);
 	
 	private List<String> options = Arrays.asList(
-			"1 -Display a book",
+			"1 -Display books",
 			"2 -Add a book",
 			"3 -Delete a book",
 			"4 -Add a customer",
@@ -48,10 +48,10 @@ public class Menu {
 					deleteBook();
 				}
 				else if(selection.equals("4")) {
-					//addCustomer();
+					addCustomer();
 				}
 				else if(selection.equals("5")) {
-					//deleteCustomer();
+					deleteCustomer();
 				}
 				else if(selection.equals("6")) {
 					checkoutBook();
@@ -68,14 +68,18 @@ public class Menu {
 				e.printStackTrace();
 			}
 			
+			System.out.println();
+			System.out.println("PRESS ENTER TO DISPLAY MENU OR -1 TO STOP.");
+			scanner.nextLine();
+			
 		}while(!selection.equals("-1"));
 	}
 	
 	private void displayBooks() throws SQLException {
 		List<Book> books = bookDao.getBooks();
 		for(Book book : books) {
-			System.out.println("BookID: " + book.getBookId() + ", Title: " + book.getTitle()+ ", Author: " 
-					+ book.getAuthor() + ", Status: " + book.getStatus());
+			System.out.println("BookID: " + book.getBookId() + ", Title: " + book.getTitle() + ", Author: " 
+					+ book.getAuthor() + ", Genre: " + book.getGenre() + ",  Status: " + book.getStatus());
 		}
 	}
 	
@@ -114,7 +118,7 @@ public class Menu {
 			System.out.print("Enter Author's Last Name: ");
 			String lName = scanner.nextLine();
 			String authorName = fName.concat(" ").concat(lName);
-			bookDao.checkoutBookByAutor(authorName);
+			bookDao.checkoutBookByAuthor(authorName);
 		}
 		else {
 			System.out.print("Enter the right search option...");
@@ -135,6 +139,27 @@ public class Menu {
 		
 		bookDao.returnBookUsingCustomerPhone(phone);
 	}
+	
+	private void addCustomer() throws SQLException {
+		System.out.print("Enter first name:  ");
+		String firstName = scanner.nextLine();
+		System.out.print("Enter last name:  ");
+		String lastName = scanner.nextLine();
+		System.out.print("Enter phone number as XXX-XXX-XXXX:  ");
+		String phone = scanner.nextLine();
+		System.out.print("Enter email address:  ");
+		String email = scanner.nextLine();
+		
+		customerDao.addCustomer(firstName, lastName, phone, email);
+	}
+	
+	private void deleteCustomer() throws SQLException {
+		System.out.print("Enter phone number as XXX-XXX-XXXX");
+		String phone = scanner.nextLine();
+		
+		customerDao.deleteCustomer(phone);
+	}
+	
 	
 	private void printMenu() {
 		System.out.println("Select an Option:\n--------------");
