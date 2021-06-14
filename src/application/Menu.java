@@ -6,11 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import dao.BookDao;
-import dao.CustomerDao;
-import dao.TransactionDao;
 import entity.Book;
-import entity.Customer;
-
 
 public class Menu {
 	

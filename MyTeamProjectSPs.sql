@@ -115,7 +115,7 @@ BEGIN
     
     SET @count = (SELECT  count(*) from bookIdTable );
     IF @count = 0 THEN 
-		SELECT -1 as bookCount, -1 as bookID, 'unavailable' as status, bookTitle as title;
+		SELECT -1 as bookCount, -1 as bookID, 'unavailable' as status, 'Book Unavailable' title;
      ELSE SELECT @count as bookCount, id as bookID, status, title from bookIdTable;
      End IF;
 END //

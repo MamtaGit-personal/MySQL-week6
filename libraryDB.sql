@@ -10,22 +10,22 @@ drop table if exists customers;
 
 
 CREATE TABLE customers(
-		id int(11) not null auto_increment,
+	id int(11) not null auto_increment,
   	first_name varchar(25) not null,
-		last_name varchar(25),
+	last_name varchar(25),
   	phone varchar(16) not null unique,
-		email varchar(384) null,
+	email varchar(384) null,
    	isactive boolean not null default True,  -- when a customer is removed the flag is set to false otherwise true
-		primary key(id)
+	primary key(id)
 );
 
 CREATE TABLE books(
 	id int(11) not null auto_increment,
-  title varchar(40) not null,
+    title varchar(40) not null,
 	author varchar(25) not null,
-  genre varchar(25),
-  status varchar(20) not null default 'available',  -- available or unavailable
-  primary key(id)
+    genre varchar(25),
+    status varchar(20) not null default 'available',  -- available or unavailable
+    primary key(id)
 );
 
 CREATE TABLE transactions(

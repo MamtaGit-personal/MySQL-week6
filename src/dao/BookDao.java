@@ -124,20 +124,21 @@ public class BookDao {
 		CallableStatement stmt = connection.prepareCall(CALL_SP_TO_FIND_BOOK_IDS_FOR_GIVEN_AUTHOR);
 		stmt.setString(1, author);
 		ResultSet rs = stmt.executeQuery(); 
-		while(rs.next()) {		
-			if(rs.getInt(1) == -1) {
-				System.out.println("The book is UNAVAILABLE. Please select ANOTHER Book...");
-			} 
-			else {
+		rs.next();
+		if(rs.getInt(1) == -1) {  
+			System.out.println("The book is UNAVAILABLE. Please select ANOTHER Book to checkout...");
+		} else {
+			do{
 				// Show all the books for a given author
 				System.out.println("BookID: " + rs.getInt(2) + ", status: " + rs.getString(3)
 				+ ", Title: " + rs.getString(4));
-			}//else
-		}//while 
-		
-		System.out.print("Select the right Title: ");
-		String title = scanner.nextLine();
-		checkoutBookByTitle(title);
+			}while(rs.next());
+			
+			System.out.print("Select the right Title: ");
+			String title = scanner.nextLine();
+			checkoutBookByTitle(title);
+		}//else
+	
 	}
 	
 	public void renewBookUsingCustomerPhone(String phone) throws SQLException {
