@@ -119,7 +119,7 @@ public class BookDao {
 		
 	}
 	
-	public void checkoutBookByAutor(String author) throws SQLException {
+	public void checkoutBookByAuthor(String author) throws SQLException {
 		System.out.println("Book DAO -> checkoutBookByAuthor():\n--------------");
 		CallableStatement stmt = connection.prepareCall(CALL_SP_TO_FIND_BOOK_IDS_FOR_GIVEN_AUTHOR);
 		stmt.setString(1, author);
