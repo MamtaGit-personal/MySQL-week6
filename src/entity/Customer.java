@@ -6,13 +6,15 @@ public class Customer {
 	private String lastName;
 	private String phone;
 	private String email; 
+	private boolean isActive;
 	
-	public Customer(int id, String first_name, String last_name, String phone, String email) {
+	public Customer(int id, String first_name, String last_name, String phone, String email, boolean isActive) {
 		this.customerId = id;
 		this.firstName = first_name;
 		this.lastName = last_name;
 		this.phone = phone;
 		this.email = email;
+		this.setActive(isActive);
 	}
 
 	public int getCustomerId() {
@@ -51,6 +53,14 @@ public class Customer {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public boolean isActive() {
+		return isActive;
+	}
+
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 
 }
