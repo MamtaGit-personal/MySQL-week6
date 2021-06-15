@@ -76,27 +76,34 @@ DELIMITER ;
 call UpdateBookStatusForAGivenBookId (1);
 
 
--- 5. We want to show all the books that a customer has, when the customer wants to renew or return a book, so that right transactionID is selected for renew/return
-DROP PROCEDURE IF EXISTS FindAllTransactionIdForACustomer;
+-- 5. To check out a book, insert all the right information in the transactions table.
+DROP PROCEDURE IF EXISTS CheckoutTransactionByBookId;
 
 DELIMITER //
 
-CREATE PROCEDURE FindAllTransactionIdForACustomer(IN customerID INT)
+CREATE PROCEDURE CheckoutTransactionByBookId(
+    IN bookID INT, 
+	IN customerPhone varchar(25)
+)
 BEGIN
-	DROP TABLE IF EXISTS transactionIdTable;
-    CREATE TEMPORARY TABLE transactionIdTable
-	AS (
-		Select id as transactionID, book_id, customer_id, action from transactions 
-		where customer_id = customerID and action in ('checkout', 'renew')
-	);
-    
-    SELECT * FROM transactionIdTable;
+		Declare transactionDate Date;
+        -- transactionDate is always today's date
+        -- Due_date is always 3 weeks from the transactionDate
+        Set transactionDate = (Select Date(now()));
+		
+        Insert into transactions(book_id, customer_id, 
+					action, transaction_date, 
+					due_date)
+        Values(bookID, (Select id from customers where phone = customerPhone), 
+				'checkout', transactionDate, 
+				(Select date_add(transactionDate, Interval +21 day)));
+	
 END //
 
 DELIMITER ;
 
 -- To call the stored procedure – 
-call FindAllTransactionIdForACustomer(1);
+call CheckoutTransactionByBookId(1, 111-111-1111);
 
 -- 6. Show all the book_ids for the specified author. An author may have multiple books of the same title or multiple titles
 DROP PROCEDURE IF EXISTS FindBookIdForAGivenAuthor;
@@ -177,3 +184,31 @@ DELIMITER ;
 -- To call the stored procedure – 
 call FindTransactionIdForAGivenBookId(1);
 
+-- 9. Find out if a customer already exists for a given phone
+DROP PROCEDURE IF EXISTS FindoutIfCustomerAlreadyExists;
+
+DELIMITER //
+
+CREATE PROCEDURE FindoutIfCustomerAlreadyExists(IN customerPhone varchar(15))
+BEGIN
+	DROP TABLE IF EXISTS customerTable;
+    CREATE TEMPORARY TABLE customerTable
+	AS (
+		Select * from customers 
+		where phone = customerPhone
+	);
+    
+    SET @isActive = (SELECT isActive from customerTable );
+    SET @count = (SELECT count(*) from customerTable);
+    
+    IF @count = 0 THEN 
+		SELECT -1 as activeStatus, -1 as customerID;
+     ELSEIF @isActive = 1 THEN 
+		SELECT @isActive as activeStatus, id as customerID from customerTable;
+	ELSE SELECT @isActive as activeStatus, id as customerID from customerTable;
+	End IF;
+END //
+DELIMITER ;
+
+-- To call the stored procedure – 
+call FindoutIfCustomerAlreadyExists('111-111-1111');
