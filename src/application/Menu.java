@@ -9,22 +9,22 @@ import dao.BookDao;
 import dao.CustomerDao;
 import entity.Book;
 
+
 public class Menu {
 	
 	private BookDao bookDao = new BookDao();
 	private CustomerDao customerDao = new CustomerDao();
-	//private TransactionDao transactionDao = new TransactionDao();
 	private Scanner scanner = new Scanner(System.in);
 	
 	private List<String> options = Arrays.asList(
-			"1 -Display books",
-			"2 -Add a book",
-			"3 -Delete a book",
-			"4 -Add a customer",
-			"5 -Delete a customer",
-			"6 -Checkout a book",
-			"7 -Renew a book",
-			"8 -Return a book"
+			"Display books",
+			"Add a book",
+			"Delete a book",
+			"Add a customer",
+			"Deactivate a customer",
+			"Checkout a book",
+			"Renew a book",
+			"Return a book"
 			);
 	
 	public void start() {

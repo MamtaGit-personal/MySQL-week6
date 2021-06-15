@@ -15,11 +15,10 @@ public class CustomerDao {
 	private final String FIND_CUSTOMERID_BY_PHONE_QUERY = "SELECT * FROM customers where phone = ?";
 	private final String CREATE_NEW_CUSTOMER_QUERY = "INSERT INTO customers (first_name, last_name, phone, email, isactive) VALUES(?, ?, ?, ?, true)";
 	private final String DELETE_CUSTOMER_BY_PHONE = "UPDATE customers SET isactive = false WHERE id = ?";
-	
+
 	private final String CALL_SP_TO_CHECK_IF_CUSTOMER_ALREADY_EXISTS = "{CALL FindoutIfCustomerAlreadyExists(?)}";
 	private final String UPDATE_CUSTOMER_STATUS_ACTIVE = "UPDATE customers SET isactive = true WHERE phone = ?";
-	
-	
+
 	public CustomerDao() {
 		connection = DBConnection.getConnection();
 	}
@@ -47,6 +46,7 @@ public class CustomerDao {
 		ps.setString(3, phone);
 		ps.setString(4, email);
 		ps.executeUpdate();
+		System.out.println(firstName + " " + lastName + " added successfully!");
 	}
 	
 	public void deleteCustomer(String phone) throws SQLException {
@@ -61,6 +61,7 @@ public class CustomerDao {
 		PreparedStatement ps = connection.prepareStatement(DELETE_CUSTOMER_BY_PHONE);
 		ps.setInt(1, customer.get(0).getCustomerId());
 		ps.executeUpdate();
+		System.out.println(customer.get(0).getFirstName() + " " + customer.get(0).getLastName() + " deactivated successfully!");
 	}
 	
 	public int checkIfCustomerPhoneAlreadyExists(String phone) throws SQLException {
@@ -80,7 +81,8 @@ public class CustomerDao {
 		PreparedStatement ps = connection.prepareStatement(UPDATE_CUSTOMER_STATUS_ACTIVE);
 		ps.setString(1, phone);
 		ps.executeUpdate();
-		System.out.println("\nThe customer's inactive flag has been set to ACTIVE Successfully!");
+		System.out.println("The customer's inactive flag has been set to ACTIVE Successfully!");
 	}
+
 
 }
