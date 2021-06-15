@@ -10,7 +10,6 @@ import dao.CustomerDao;
 import entity.Book;
 
 
-
 public class Menu {
 	
 	private BookDao bookDao = new BookDao();
@@ -134,7 +133,6 @@ public class Menu {
 	private void returnBook() throws SQLException {
 		System.out.print("Enter your phone as XXX-XXX-XXXX: ");
 		String phone = scanner.nextLine();
-		
 		bookDao.returnBookUsingCustomerPhone(phone);
 	}
 	

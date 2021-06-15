@@ -12,11 +12,12 @@ import java.util.Scanner;
 import entity.Book;
 import entity.Customer;
 
+
 public class BookDao {
 	
 	private TransactionDao transactionDao = new TransactionDao();
 	private CustomerDao customerDao = new CustomerDao();
-
+	
 	private Scanner scanner = new Scanner(System.in);
 	private Connection connection;
 	
@@ -84,7 +85,7 @@ public class BookDao {
 			//First delete the row in the transactions table where book_id = bookID
 			System.out.println("Transactions Table -> Delete a row for a given bookId: " + bookId);
 			transactionDao.deleteRowFromTransactionByBookId(bookId);
-		
+					
 			//Then delete the row in the books table where id = bookID
 			System.out.println("Books Table -> Delete a Book for a given bookId " + bookId);
 			PreparedStatement ps = connection.prepareStatement(DELETE_BOOK_BY_ID_QUERY);
@@ -130,20 +131,22 @@ public class BookDao {
 		CallableStatement stmt = connection.prepareCall(CALL_SP_TO_FIND_BOOK_IDS_FOR_GIVEN_AUTHOR);
 		stmt.setString(1, author);
 		ResultSet rs = stmt.executeQuery(); 
-		while(rs.next()) {		
-			if(rs.getInt(1) == -1) {
-				System.out.println("The book is UNAVAILABLE. Please select ANOTHER Book...");
-			} 
-			else {
+		rs.next();
+		if(rs.getInt(1) == -1) {  
+			System.out.println("The book is UNAVAILABLE. Please select ANOTHER Book to checkout...");
+		} else {
+			do{
 				// Show all the books for a given author
 				System.out.println("BookID: " + rs.getInt(2) + ", status: " + rs.getString(3)
 				+ ", Title: " + rs.getString(4));
-			}//else
-		}//while 
-		
-		System.out.print("Type the right Title: ");
-		String title = scanner.nextLine();
-		checkoutBookByTitle(title);
+			}while(rs.next());
+			
+			System.out.print("Select the right Title: ");
+			String title = scanner.nextLine();
+			checkoutBookByTitle(title);
+	}//else
+	
+
 	}
 	
 	public void renewBookUsingCustomerPhone(String phone) throws SQLException {
@@ -156,7 +159,7 @@ public class BookDao {
 				
 		// Find all the books in the transactions table using CustomerId. A customer may have checked out more than ONE book. 
 		transactionDao.FindTransactionByCustomerID(customer.get(0).getCustomerId());
-						
+								
 		System.out.print("Enter the right Transaction ID to renew that book: ");
 		int transactionID = Integer.parseInt(scanner.nextLine());
 		transactionDao.renewTransactionByTransactionID(transactionID);
