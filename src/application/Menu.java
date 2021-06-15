@@ -7,27 +7,25 @@ import java.util.Scanner;
 
 import dao.BookDao;
 import dao.CustomerDao;
-import dao.TransactionDao;
 import entity.Book;
-import entity.Customer;
+
 
 
 public class Menu {
 	
 	private BookDao bookDao = new BookDao();
 	private CustomerDao customerDao = new CustomerDao();
-	//private TransactionDao transactionDao = new TransactionDao();
 	private Scanner scanner = new Scanner(System.in);
 	
 	private List<String> options = Arrays.asList(
-			"1 -Display books",
-			"2 -Add a book",
-			"3 -Delete a book",
-			"4 -Add a customer",
-			"5 -Delete a customer",
-			"6 -Checkout a book",
-			"7 -Renew a book",
-			"8 -Return a book"
+			"Display books",
+			"Add a book",
+			"Delete a book",
+			"Add a customer",
+			"Deactivate a customer",
+			"Checkout a book",
+			"Renew a book",
+			"Return a book"
 			);
 	
 	public void start() {
@@ -150,7 +148,19 @@ public class Menu {
 		System.out.print("Enter email address:  ");
 		String email = scanner.nextLine();
 		
-		customerDao.addCustomer(firstName, lastName, phone, email);
+		int isActiveCustomer = customerDao.checkIfCustomerPhoneAlreadyExists(phone);
+		if(isActiveCustomer == -1) {
+			System.out.print("The customer does not exist. Add the new customer.");
+			customerDao.addCustomer(firstName, lastName, phone, email, true);
+		}
+		else if(isActiveCustomer == 0) {
+			System.out.print("The customer already exists in the system, but it's inactive. Make it active.");
+			customerDao.changeCustomerStatusToActive(phone);
+		}
+		else {
+			System.out.print("The customer already exists and is active. Do NOT add this customer.");
+		}
+		
 	}
 	
 	private void deleteCustomer() throws SQLException {

@@ -114,7 +114,13 @@ public class BookDao {
 			stmt2.executeUpdate();
 			
 			// Then we checkout the book using the transactions table. We set the due_date, transaction_date and action etc. columns
-			transactionDao.checkoutTransactionByBookId(rs.getInt(2), phone);
+			// Find the customer id for a given phone first
+//			List<Customer> customer = customerDao.getCustomerInfoUsingPhone(phone);
+//			System.out.println("CustomerID: " + customer.get(0).getCustomerId() + ", FirstName: " + customer.get(0).getFirstName()
+//			+ ", Phone: " + customer.get(0).getPhone()) ;
+			
+			transactionDao.checkoutTransactionByBookId(rs.getInt(2), phone); //customer.get(0).getCustomerId()
+			
 		}
 		
 	}
@@ -135,7 +141,7 @@ public class BookDao {
 			}//else
 		}//while 
 		
-		System.out.print("Select the right Title: ");
+		System.out.print("Type the right Title: ");
 		String title = scanner.nextLine();
 		checkoutBookByTitle(title);
 	}

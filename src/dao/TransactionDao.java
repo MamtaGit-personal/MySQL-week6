@@ -32,11 +32,12 @@ public class TransactionDao {
 		connection = DBConnection.getConnection();
 	}
 	
-	public void checkoutTransactionByBookId(int bookId, String phone) throws SQLException {
+	public void checkoutTransactionByBookId(int bookId, String phone) throws SQLException {  
 		System.out.println("Book DAO -> actionCheckoutBookByBookdId():\n--------------");
 		CallableStatement stmt = connection.prepareCall(CALL_SP_TO_CHECKOUT_BOOK);
 		stmt.setInt(1, bookId);
 		stmt.setString(2, phone);
+		//stmt.setInt(2, custID);
 		stmt.executeUpdate();
 	}
 	
