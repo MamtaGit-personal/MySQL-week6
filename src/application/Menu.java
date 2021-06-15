@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import dao.BookDao;
+import dao.CustomerDao;
 import entity.Book;
 
 public class Menu {
@@ -132,7 +133,6 @@ public class Menu {
 	private void returnBook() throws SQLException {
 		System.out.print("Enter your phone as XXX-XXX-XXXX: ");
 		String phone = scanner.nextLine();
-		
 		bookDao.returnBookUsingCustomerPhone(phone);
 	}
 	
@@ -146,7 +146,19 @@ public class Menu {
 		System.out.print("Enter email address:  ");
 		String email = scanner.nextLine();
 		
-		customerDao.addCustomer(firstName, lastName, phone, email);
+		int isActiveCustomer = customerDao.checkIfCustomerPhoneAlreadyExists(phone);
+		if(isActiveCustomer == -1) {
+			System.out.print("The customer does not exist. Add the new customer.");
+			customerDao.addCustomer(firstName, lastName, phone, email, true);
+		}
+		else if(isActiveCustomer == 0) {
+			System.out.print("The customer already exists in the system, but it's inactive. Make it active.");
+			customerDao.changeCustomerStatusToActive(phone);
+		}
+		else {
+			System.out.print("The customer already exists and is active. Do NOT add this customer.");
+		}
+		
 	}
 	
 	private void deleteCustomer() throws SQLException {

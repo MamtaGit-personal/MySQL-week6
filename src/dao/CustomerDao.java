@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.Book;
 import entity.Customer;
 
 public class CustomerDao {
@@ -15,7 +15,10 @@ public class CustomerDao {
 	private final String FIND_CUSTOMERID_BY_PHONE_QUERY = "SELECT * FROM customers where phone = ?";
 	private final String CREATE_NEW_CUSTOMER_QUERY = "INSERT INTO customers (first_name, last_name, phone, email, isactive) VALUES(?, ?, ?, ?, true)";
 	private final String DELETE_CUSTOMER_BY_PHONE = "UPDATE customers SET isactive = false WHERE id = ?";
-	//private final String GET_CUSTID_FOR_GIVEN_PHONE = "SELECT id FROM customers WHERE phone = ?";
+	
+	private final String CALL_SP_TO_CHECK_IF_CUSTOMER_ALREADY_EXISTS = "{CALL FindoutIfCustomerAlreadyExists(?)}";
+	private final String UPDATE_CUSTOMER_STATUS_ACTIVE = "UPDATE customers SET isactive = true WHERE phone = ?";
+	
 	
 	public CustomerDao() {
 		connection = DBConnection.getConnection();
@@ -35,7 +38,7 @@ public class CustomerDao {
 	}
 
 	
-	public void addCustomer(String firstName, String lastName, String phone, String email) throws SQLException {
+	public void addCustomer(String firstName, String lastName, String phone, String email, Boolean isActive) throws SQLException {
 		System.out.println("Customer DAO -> Add a Customer():\n--------------");
 
 		PreparedStatement ps = connection.prepareStatement(CREATE_NEW_CUSTOMER_QUERY);
@@ -60,5 +63,24 @@ public class CustomerDao {
 		ps.executeUpdate();
 	}
 	
+	public int checkIfCustomerPhoneAlreadyExists(String phone) throws SQLException {
+		System.out.println("Customer DAO -> Check if customer's phone already exists it's inactive ():\n--------------");
+		
+		//Find customer id by given phone
+		CallableStatement stmt = connection.prepareCall(CALL_SP_TO_CHECK_IF_CUSTOMER_ALREADY_EXISTS);
+		stmt.setString(1, phone);
+		ResultSet rs = stmt.executeQuery();
+		rs.next();
+		return rs.getInt(1); 
+				
+	}
+	
+	public void changeCustomerStatusToActive(String phone) throws SQLException {
+		//Change the inactive status of the customer to active.
+		PreparedStatement ps = connection.prepareStatement(UPDATE_CUSTOMER_STATUS_ACTIVE);
+		ps.setString(1, phone);
+		ps.executeUpdate();
+		System.out.println("The customer's inactive flag has been set to ACTIVE Successfully!");
+	}
 
 }

@@ -12,11 +12,12 @@ import java.util.Scanner;
 import entity.Book;
 import entity.Customer;
 
+
 public class BookDao {
 	
 	private TransactionDao transactionDao = new TransactionDao();
 	private CustomerDao customerDao = new CustomerDao();
-
+	
 	private Scanner scanner = new Scanner(System.in);
 	private Connection connection;
 	
@@ -84,7 +85,7 @@ public class BookDao {
 			//First delete the row in the transactions table where book_id = bookID
 			System.out.println("Transactions Table -> Delete a row for a given bookId: " + bookId);
 			transactionDao.deleteRowFromTransactionByBookId(bookId);
-		
+					
 			//Then delete the row in the books table where id = bookID
 			System.out.println("Books Table -> Delete a Book for a given bookId " + bookId);
 			PreparedStatement ps = connection.prepareStatement(DELETE_BOOK_BY_ID_QUERY);
@@ -151,7 +152,7 @@ public class BookDao {
 				
 		// Find all the books in the transactions table using CustomerId. A customer may have checked out more than ONE book. 
 		transactionDao.FindTransactionByCustomerID(customer.get(0).getCustomerId());
-						
+								
 		System.out.print("Enter the right Transaction ID to renew that book: ");
 		int transactionID = Integer.parseInt(scanner.nextLine());
 		transactionDao.renewTransactionByTransactionID(transactionID);
