@@ -80,7 +80,7 @@ public class CustomerDao {
 		PreparedStatement ps = connection.prepareStatement(UPDATE_CUSTOMER_STATUS_ACTIVE);
 		ps.setString(1, phone);
 		ps.executeUpdate();
-		System.out.println("The customer's inactive flag has been set to ACTIVE Successfully!");
+		System.out.println("\nThe customer's inactive flag has been set to ACTIVE Successfully!");
 	}
 
 }
